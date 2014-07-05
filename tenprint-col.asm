@@ -40,9 +40,12 @@ rnd lda RANDOM  ; load random value from voice 3
     rts
 
 print clc
-      jsr PLOT
+row   jsr PLOT
       jsr rnd     ; get random "\" or "/"
       jsr CHROUT  ; output char in A to screen
+      inx
+      cpx #25
+      bne row
       rts         ; return from this subroutine
 
 
@@ -53,19 +56,18 @@ wait  lda #0
       bne .loop
       rts
 
-start lda #$80
-      sta FREHI3	; set voice 3 frequency (high byte)
-      sta VCREG3	; select noise waveform on voice 3
-main  ldx #0
+col   ldx #0
       ldy #1
-loopc 
-loopr jsr print
-      inx
-      cpx #25
-      bne loopr
+collp jsr print
       jsr wait
       ldx #0
       iny
       cpy #39
-      bne loopc
-      jmp main
+      bne collp
+      rts
+
+start lda #$80
+      sta FREHI3	; set voice 3 frequency (high byte)
+      sta VCREG3	; select noise waveform on voice 3
+main  jsr col
+      jmp main    ; to infinity!
