@@ -1,17 +1,19 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Inspired by the book 10 PRINT CHR$(205.5+RND(1));:GOTO 10         ;;
-;; tenprint.asm outputs an entire screen at a time, instead of line  ;;
+;; tenprint-page.asm outputs an entire screen at a time, instead of line  ;;
 ;; by line. The refresh rate can be set in seconds by adjusting the  ;;
 ;; delay variable (default = 0.5 second).                            ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 !cpu 6502
-!to "build/10print.prg",cbm
+!to "build/tenprint-page.prg",cbm
 
+; I'm using the labels from Mapping the 64
 FREHI3 = $d40f
 VCREG3 = $d412
 RANDOM = $d41b
 TIME = $a2
+
 delay = 30 	; wait delay/60 seconds
 
 * = $0801	; BASIC starts at #2049 = $0801
