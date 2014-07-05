@@ -10,9 +10,10 @@
 
 ; I'm using the labels from Mapping the 64
 FREHI3 = $d40f
-VCREG3 = $d412
 RANDOM = $d41b
 TIME = $a2
+VICSCN = $0400
+VCREG3 = $d412
 
 delay = 30 	; wait delay/60 seconds
 
@@ -22,7 +23,7 @@ delay = 30 	; wait delay/60 seconds
 !byte $31,$35,$32,$00,$00,$00           ; BASIC line: 2012 SYS 49152
 
 
-* = $0400
+* = VICSCN
 !fill 1000,$4d	;fill screen with "\"
 
 
@@ -35,8 +36,9 @@ rnd lda RANDOM  ; load random value from voice 3
     adc #$4d    ; the value of "\"
     rts
 
-print jsr rnd 	  ; get random "\" or "/"
-      sta $0400,x ; place it on screen
+print ldx #0
+ploop jsr rnd 	    ; get random "\" or "/"
+      sta $0400,x   ; place it on screen
       jsr rnd
       sta $0500,x 
       jsr rnd
@@ -44,23 +46,22 @@ print jsr rnd 	  ; get random "\" or "/"
       jsr rnd
       sta $06e8,x 
       inx           ; increment X
-      bne print     ; did X turn to zero yet?
+      bne ploop     ; did X turn to zero yet?
                     ; if not, continue with the loop
       rts           ; return from this subroutine
 
 
-wait  lda TIME
-      cmp #delay 	
-      bne wait
+wait  lda #0
+      sta TIME
+wloop lda TIME
+      cmp #delay  
+      bne wloop
       rts
 
 start lda #$80
       sta FREHI3	; set voice 3 frequency (high byte)
       sta VCREG3	; select noise waveform on voice 3
-main  ldx #0
-      jsr print
-      lda #0
-      sta TIME
-      jsr wait
-      jmp main	; to infinity
+main  jsr print   ; print screen of random "/" or "\"
+      jsr wait    ; wait for delay/60 seconds
+      jmp main	  ; to infinity
 

@@ -8,26 +8,29 @@
 !cpu 6502
 !to "build/tenprint-col.prg",cbm
 
-; I'm using the labels from Mapping the 64
+; I'm using the labels from Leemon's Mapping the Commodore 64
+CHROUT = $f1ca
 FREHI3 = $d40f
-VCREG3 = $d412
+PLOT = $e50a
 RANDOM = $d41b
 TIME = $a2
-PLOT = $E50A
+VCREG3 = $d412
+VICSCN = $0400
+
 
 delay = 15 	; wait delay/60 seconds
 
-* = $0801	; BASIC starts at #2049 = $0801
+* = $0801	; BASIC starts at $0801
 
 !byte $0d,$08,$dc,$07,$9e,$20,$34,$39   ; BASIC to load $c000 inserts 
 !byte $31,$35,$32,$00,$00,$00           ; BASIC line: 2012 SYS 49152
 
 
-* = $0400
+* = VICSCN
 !fill 1000,$20	;clear screen
 
 
-*=$c000
+* = $c000
 
 jmp start
 
@@ -39,32 +42,30 @@ rnd lda RANDOM  ; load random value from voice 3
 print clc
       jsr PLOT
       jsr rnd     ; get random "\" or "/"
-      jsr $e716
+      jsr CHROUT  ; output char in A to screen
       rts         ; return from this subroutine
 
 
-wait  lda TIME
+wait  lda #0
+      sta TIME
+.loop lda TIME
       cmp #delay 	
-      bne wait
+      bne .loop
       rts
 
 start lda #$80
       sta FREHI3	; set voice 3 frequency (high byte)
       sta VCREG3	; select noise waveform on voice 3
-      ldx #0
+main  ldx #0
       ldy #1
 loopc 
 loopr jsr print
       inx
       cpx #25
       bne loopr
-      lda #0
-      sta TIME
       jsr wait
       ldx #0
       iny
       cpy #39
       bne loopc
-      ldx #0
-      ldy #1
-      jmp loopc
+      jmp main
