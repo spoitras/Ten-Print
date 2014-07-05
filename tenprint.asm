@@ -26,7 +26,7 @@ delay = 30 	; wait delay/60 seconds
 
 *=$c000
 
-jmp main
+jmp start
 
 rnd	lda RANDOM 	; load random value from voice 3
 	and #1 		; keep only the low bit and add it to
@@ -52,13 +52,13 @@ wait   lda TIME
        bne wait
        rts
 
-main	lda #$80
-		sta FREHI3	; set voice 3 frequency (high byte)
-		sta VCREG3	; select noise waveform on voice 3
-		ldx	#0
-		jsr print
-		lda #0
-		sta TIME
-		jsr wait
-		jmp main	; to infinity
+start	lda #$80
+  		sta FREHI3	; set voice 3 frequency (high byte)
+	   	sta VCREG3	; select noise waveform on voice 3
+main  ldx	#0
+		  jsr print
+		  lda #0
+		  sta TIME
+		  jsr wait
+		  jmp main	; to infinity
 
