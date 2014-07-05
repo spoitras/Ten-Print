@@ -2,7 +2,7 @@
 ;; Inspired by the book 10 PRINT CHR$(205.5+RND(1));:GOTO 10         ;;
 ;; tenprint-col.asm outputs column by column, instead of line by     ;;
 ;; line. The refresh rate can be set in seconds by adjusting the     ;;
-;; delay variable (default = 0.25 second).                            ;;
+;; delay variable (default = 0.25 second).                           ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 !cpu 6502
