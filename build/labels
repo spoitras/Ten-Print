@@ -1,9 +1,10 @@
 VCREG3  =$d412
-main  =$c02e; ?
+main  =$c036
 delay  =$1e
 FREHI3  =$d40f
 TIME  =$a2
 print  =$c00b
 wait  =$c027
+start  =$c02e; ?
 RANDOM  =$d41b
 rnd  =$c003
