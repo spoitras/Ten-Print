@@ -29,7 +29,7 @@ delay = 30 	; wait delay/60 seconds
 jmp start
 
 rnd lda RANDOM  ; load random value from voice 3
-    and #10     ; keep only the low bit and add it to
+    and #1      ; keep only the low bit and add it to
     adc #$4d    ; the value of "\"
     rts
 
