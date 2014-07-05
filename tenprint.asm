@@ -52,8 +52,8 @@ wait  lda TIME
       bne wait
       rts
 
-start	lda #$80
-  	  sta FREHI3	; set voice 3 frequency (high byte)
+start lda #$80
+      sta FREHI3	; set voice 3 frequency (high byte)
       sta VCREG3	; select noise waveform on voice 3
 main  ldx #0
       jsr print
